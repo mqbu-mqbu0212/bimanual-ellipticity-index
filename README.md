@@ -81,7 +81,7 @@ Key parameters in `main.py`. Values below are defaults tuned for a 24-subject da
 | `residual_threshold` | 0.172 | Ellipse fitting RMS residual cutoff (dimensionless; IQR×1.5 fence of dataset) |
 | `closure_radius` | 0.697 | Start-circle radius as fraction of sd_major (IQR×1.5 fence of L-hand data) |
 | `closure_tail_ratio` | 0.5 | Fraction of cycle treated as "tail" for closure check |
-| `near_circle_threshold` | 0.85 | Flatness threshold for Q-vector method |
+| `near_circle_threshold` | 0.85 | Flatness threshold above which axis ambiguity is resolved by midpoint-axis alignment |
 | `clip_oi_to_one` | True | Clip OI > 1.0 to 1.0 |
 | `x_min/x_max/y_min/y_max` | -30/1048/185/1737 | Tablet active area bounds (device-specific) |
 
