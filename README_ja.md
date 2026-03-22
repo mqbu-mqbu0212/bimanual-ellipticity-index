@@ -78,7 +78,7 @@ output/
 | `residual_threshold` | 0.172 | 楕円フィッティングRMS残差の閾値（無次元、データセットのIQR×1.5フェンス） |
 | `closure_radius` | 0.697 | 始点円の半径（sd_major比、L手データのIQR×1.5フェンス） |
 | `closure_tail_ratio` | 0.5 | クロージャ判定に使う末尾の割合 |
-| `near_circle_threshold` | 0.85 | Q-vector法を使うflatnessの閾値 |
+| `near_circle_threshold` | 0.85 | 始点終点中点による軸判定を使うflatnessの閾値 |
 | `clip_oi_to_one` | True | OI > 1.0 を1.0にクリップ |
 | `x_min/x_max/y_min/y_max` | -30/1048/185/1737 | タブレット有効範囲（環境依存） |
 
