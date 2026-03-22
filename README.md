@@ -1,13 +1,14 @@
-# bimanual-ellipticity-index — OI Calculator for Bimanual Coordination Research
 [日本語版はこちら](README_ja.md)
+
+# bimanual-ellipticity-index — OI Calculator for Bimanual Coordination Research
 
 A Python pipeline for computing the Ellipticity Index (OI) from bimanual coordination task data recorded on a pen tablet.
 
 ## Background
 
-In bimanual coordination research, participants are asked to simultaneously draw an ellipse with one hand and a straight line with the other. The degree of coordination between the two hands is quantified by how circular the "ellipse" hand's trajectory becomes — a phenomenon known as the **bimanual coupling effect**.
+In bimanual coordination research, participants are asked to simultaneously draw a circle with one hand and a straight line with the other. Due to the **bimanual coupling effect**, both trajectories become distorted: the circle-drawing hand's trajectory becomes more elliptical (elongated toward a line), and the line-drawing hand's trajectory curves toward an ellipse.
 
-The standard metric for this is the **Ellipticity Index (OI = sd_minor / sd_major)**, where a higher value (closer to 1.0) indicates a more circular trajectory and stronger coupling.
+The **Ellipticity Index (OI = sd_minor / sd_major)** quantifies how elliptical a trajectory is, ranging from 0 (perfect line) to 1 (perfect circle). In bimanual coupling analysis, OI is used to measure the degree of distortion from the intended shape — a decrease in OI for the circle hand and an increase for the line hand both indicate stronger coupling.
 
 ### Motivation
 
@@ -17,7 +18,7 @@ During my own research on how the sense of body ownership (manipulated via VR) a
 
 - The existing OI computation code I had written was fragmented, inconsistently configured, and partially manual
 - Rotation correction was applied by forcibly converting landscape-oriented ellipses to portrait orientation — an approach that is inherently arbitrary
-- Analysis of the **ellipse hand** is just as important as the straight-line hand for understanding the full picture of bimanual coupling, and arguably more relevant when studying coordination quality
+- Analysis of the **circle hand** is just as important as the line hand for understanding the full picture of bimanual coupling, and arguably more relevant when studying coordination quality
 
 This tool is a ground-up rewrite that addresses those issues. It is released publicly with the hope that it helps **standardise OI computation across the field**, making results more comparable between studies and supporting further development of bimanual coordination research — including HCI applications involving body ownership, haptics, and motor control.
 
@@ -96,7 +97,7 @@ Key parameters in `main.py`. Values below are defaults tuned for a 24-subject da
 
 This pipeline was developed as part of a study on how **visually-induced sense of body ownership affects bimanual coordination** (n=24, within-subjects design, 4 VR conditions). Key results:
 
-- Disownership score correlated significantly with OI change (r = 0.43, p = 0.03)
+- Disownership score correlated significantly with OI change in the line-drawing hand (r = 0.43, p = 0.03)
 - Bimanual coupling was observed in both hands across all conditions (p < 0.01 vs. unimanual baseline)
 
 ## License
