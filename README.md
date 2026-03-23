@@ -122,9 +122,9 @@ Images use anonymised data.
 
 When the tail enters the closure circle, exits, but remains within distance r of the front half trajectory, the cycle is trimmed at the point in the tail closest to the start. The before/after pair below shows the effect on the computed OI (0.7892 → 0.8417).
 
-| Before trim | After trim |
-|:-----------:|:----------:|
-| ![Before and after trim](images/fig6_trim.png) ||
+| Before/After trim |
+|:-----------:|
+| ![Before and after trim](images/fig6_trim.png) |
 
 ## Known Limitations
 
