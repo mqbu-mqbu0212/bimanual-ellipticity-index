@@ -8,7 +8,7 @@ A Python pipeline for computing the Ellipticity Index (OI) from bimanual coordin
 
 In bimanual coordination research, participants are asked to simultaneously draw a circle with one hand and a straight line with the other. Due to the **bimanual coupling effect**, both trajectories become distorted: the circle-drawing hand's trajectory becomes more elliptical (elongated toward a line), and the line-drawing hand's trajectory curves toward an ellipse.
 
-The **Ellipticity Index** (OI) quantifies how elliptical a trajectory is, ranging from 0 (perfect line) to 1 (perfect circle). In bimanual coupling analysis, changes in OI for both hands are used to measure the degree of coupling.
+TThe **Ellipticity Index** (OI) quantifies how elliptical a trajectory is, ranging from 0 (perfect line) to 1 (perfect circle). In bimanual coupling analysis, changes in OI for both hands are used to measure the degree of coupling.
 
 ### Motivation
 
@@ -29,7 +29,7 @@ OI is computed via **PCA** on each detected cycle's trajectory:
 - `sd_minor` = standard deviation along the second principal component
 - `OI = sd_minor / sd_major`
 
-PCA is rotation-invariant, so no axis-alignment correction is needed. For near-circular cycles (flatness ≥ 0.85), axis ambiguity is resolved by computing the midpoint of the start and end points, then determining which principal axis it aligns with more closely.
+PCA is rotation-invariant, so no axis-alignment correction is needed. For near-circular cycles (flatness ≥ 0.85), axis ambiguity is resolved by computing the midpoint of the start and end points, then determining which principal axis it aligns with more closely.For near-circular cycles where the Q-vector method is used, axis assignment can occasionally result in OI > 1.0. By default (`clip_oi_to_one=True`), these values are clipped to 1.0. Set `clip_oi_to_one=False` to retain them as-is.
 
 Cycles are detected by projecting the trajectory onto its PCA major axis and identifying turnaround points. Each detected cycle is then quality-filtered (ellipse fitting residual check and closure check) before being used in OI calculation. Results are aggregated per participant per condition.
 
@@ -40,7 +40,7 @@ The closure check verifies that the trajectory returns near its starting point. 
 - **trim**: the tail enters the circle, exits, but remains within distance r of the front half trajectory → trimmed at the point in the tail closest to the start
 - **pass**: the tail enters the circle and does not exit → kept as-is
 
-Trimming affects OI: in example data, trim changed OI from 0.7892 to 0.8417.
+Since human-drawn trajectories inevitably drift between cycles, the tail portion often represents this drift rather than the intended ellipse. Because this drift cannot be quantified separately, including it in OI calculation would distort the result. Trimming is therefore a deliberate design choice to extract only the portion of the trajectory that reflects the participant's intended shape. In example data, trim changed OI from 0.7892 to 0.8417.
 
 ## Installation
 
@@ -91,7 +91,7 @@ Key parameters in `main.py`. Values below are defaults tuned for a 24-subject da
 | `closure_radius` | 0.697 | Start-circle radius as fraction of sd_major (IQR×1.5 fence of L-hand data) |
 | `closure_tail_ratio` | 0.5 | Fraction of cycle treated as "tail" for closure check |
 | `near_circle_threshold` | 0.85 | Flatness threshold above which axis ambiguity is resolved by midpoint-axis alignment |
-| `clip_oi_to_one` | True | Clip OI > 1.0 to 1.0 |
+| `clip_oi_to_one` | True | Clip OI > 1.0 to 1.0 (set False to retain values above 1.0) |
 | `x_min/x_max/y_min/y_max` | -30/1048/185/1737 | Tablet active area bounds (device-specific) |
 
 > **Note**: `closure_radius` and `residual_threshold` were derived from the original dataset. When applying to new data, recalculate these from your own distribution.
@@ -103,13 +103,9 @@ Images use anonymised data.
 
 ### Kept cycles
 
-<div align="center">
-
 | Circle hand | Line hand |
 |:-----------:|:---------:|
-| <img src="images/fig1_circle_kept.png" height="400"> | <img src="images/fig2_line_kept.png" height="500"> |
-
-</div>
+| ![Circle hand — kept](images/fig1_circle_kept.png) | ![Line hand — kept](images/fig2_line_kept.png) |
 
 ### Removed cycles
 
@@ -120,18 +116,24 @@ Images use anonymised data.
 
 ### Closure trim
 
-When the tail enters the closure circle, exits, but remains within distance r of the front half trajectory, the cycle is trimmed at the point in the tail closest to the start. The before/after pair below shows the effect on the computed OI (0.7892 → 0.8417).
+Since human-drawn trajectories drift between cycles, the tail often represents unintended overlap rather than the intended ellipse shape. When the tail enters the closure circle, exits, but remains within distance r of the front half trajectory, the cycle is trimmed at the point in the tail closest to the start. The figure below shows a before/after example (OI: 0.7892 → 0.8417).
 
-| Before trim | After trim |
-|:-----------:|:----------:|
-| ![Before and after trim](images/fig6_trim.png) ||
+![Before and after trim](images/fig6_trim.png)
 
 ## Known Limitations
 
 - Coordinate bounds (`x_min` etc.) are hardcoded for a specific tablet — generalisation requires reconfiguration
 - Participants who naturally draw landscape-oriented ellipses (major axis horizontal) will show attenuated OI values under the PCA-based method; a y-axis-based OI option is planned for a future version
 - Overlap that stays within the closure circle is not trimmed (classified as **pass**). Trim accuracy therefore depends on the closure circle size, and may be insufficient as a general quality guarantee
-- The escape condition (removal when the tail stays far from the front half for `closure_escape_n` consecutive points) has not triggered in any circle-hand data in the original dataset, and is not meaningful for the line hand. Its practical effect on data quality is uncertain
+- The escape condition (removal when the tail stays far from the front half for `closure_escape_n` consecutive points) has not triggered in any circle-hand data in the original dataset, and is not meaningful for the line hand. Its practical effect on data quality is uncertain. A configuration option to disable trimming entirely is planned for a future version
+
+## Planned Improvements (v2)
+
+- Additional OI calculation options (PCA-based / y-axis-based / nearest-to-Q axis)
+- ML-based cycle quality classification to replace the rule-based ellipse fitting filter (Random Forest / LSTM / CNN)
+- Geometry-based trim improvement using PCA major axis intersection
+- Configurable trim on/off option
+- Configurable x/y column selection
 
 ## Research Context
 
