@@ -6,7 +6,7 @@ A Python pipeline for computing the Ellipticity Index (OI) from bimanual coordin
 
 **Problem:** OI computation methods are inconsistent across studies, and the code I had been using in my own research relied on manual steps and ambiguous axis definitions.  
 **Solution:** A fully automated pipeline with PCA-based OI calculation, geometry-based cycle filtering, and unified configuration.  
-**Result:** Reproducible OI values with explicit, adjustable parameters — applicable to both hands across any bimanual coordination dataset.  
+**Result:** Reproducible OI values with explicit, adjustable parameters — applicable to both hands across any bimanual coordination dataset.
 
 ## Background
 
@@ -24,14 +24,6 @@ During my own research on how the sense of body ownership (manipulated via VR) a
 - The axis definition used for OI calculation was ambiguous: when a participant drew a landscape-oriented ellipse, forcing it to portrait orientation introduced an interpretation problem that could not be resolved without additional assumptions
 
 This tool is a ground-up rewrite that addresses those issues. The axis ambiguity problem is not fully resolved — it remains an open question whether a landscape ellipse reflects the coupling effect or the participant's natural drawing style — but the pipeline makes the definition explicit and consistent, so at least the source of ambiguity is clear. It is released publicly with the hope that it helps **standardise OI computation across the field**, making results more comparable between studies and supporting further development of bimanual coordination research.
-
-### Applications
-
-This pipeline is designed for any research or application that requires quantifying trajectory ellipticity from repeated cyclic motion, including:
-
-- Bimanual coordination studies (motor control, cognitive neuroscience)
-- Rehabilitation assessment (phantom limb, motor recovery)
-- HCI research involving body ownership, haptics, or motor-sensory interaction
 
 ## Method
 
@@ -52,7 +44,7 @@ The closure check verifies that the trajectory returns near its starting point. 
 - **trim**: the tail enters the circle, exits, but remains within distance r of the front half trajectory → trimmed at the point in the tail closest to the start
 - **pass**: the tail enters the circle and does not exit → kept as-is
 
-Since human-drawn trajectories inevitably drift between cycles, the tail portion often represents this drift rather than the intended ellipse. Because this drift cannot be quantified separately, including it in OI calculation would distort the result. Trimming is therefore a deliberate design choice to extract only the portion of the trajectory that reflects the participant's intended shape. In example data, trim changed OI from 0.7892 to 0.8417.
+Trimming is a deliberate design choice to extract only the portion of the trajectory that reflects the participant's intended shape.
 
 ## Installation
 
@@ -136,9 +128,7 @@ Images use anonymised data.
 
 ### Closure trim
 
-Since human-drawn trajectories drift between cycles, the tail often represents unintended overlap rather than the intended ellipse shape. When the tail enters the closure circle, exits, but remains within distance r of the front half trajectory, the cycle is trimmed at the point in the tail closest to the start.
-
-Including excess tail shifts the centroid of the trajectory, which in turn alters the sd_major and sd_minor derived from PCA — causing OI to deviate from the value that reflects the intended ellipse shape. Trimming ensures OI is computed from the intended portion of the trajectory only. The figure below shows a before/after example (OI: 0.7892 → 0.8417).
+Since human-drawn trajectories inevitably drift between cycles, the tail portion often represents this drift rather than the intended ellipse shape. Including excess tail shifts the centroid of the trajectory, which in turn alters the sd_major and sd_minor derived from PCA — causing OI to deviate from the value that reflects the intended ellipse shape. Trimming ensures OI is computed from the intended portion of the trajectory only. The figure below shows a before/after example (OI: 0.7892 → 0.8417).
 
 ![Before and after trim](images/fig6_trim.png)
 
@@ -156,6 +146,14 @@ Including excess tail shifts the centroid of the trajectory, which in turn alter
 - Geometry-based trim improvement using PCA major axis intersection
 - Configurable trim on/off option
 - Configurable x/y column selection
+
+## Applications
+
+This pipeline is designed for any research or application that requires quantifying trajectory ellipticity from repeated cyclic motion, including:
+
+- Bimanual coordination studies (motor control, cognitive neuroscience)
+- Rehabilitation assessment (phantom limb, motor recovery)
+- HCI research involving body ownership, haptics, or motor-sensory interaction
 
 ## Research Context
 
