@@ -168,11 +168,14 @@ Since human-drawn trajectories inevitably drift between cycles, the tail portion
 
 ## Planned Improvements (v2)
 
-- Additional OI calculation options (PCA-based / y-axis-based / nearest-to-Q axis)
-- ML-based cycle quality classification to replace the rule-based ellipse fitting filter (Random Forest / LSTM / CNN)
+- y-axis-based OI calculation option (for analysing drawing tendencies in landscape-ellipse participants)
+- Major-axis angle threshold for cycle exclusion (exclude cycles with angle above threshold; applied only when flatness < 0.85)
+- ML-based cycle quality classification (Random Forest / LSTM / CNN)
 - Geometry-based trim improvement using PCA major axis intersection
 - Configurable trim on/off option
 - Configurable x/y column selection
+- Per-cycle statistical output of ellipse angle and fitting residual (mean ± standard deviation)
+- Drawing quality score based on angle variance and residual variance
 
 ## Applications
 
