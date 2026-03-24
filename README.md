@@ -103,9 +103,13 @@ Images use anonymised data.
 
 ### Kept cycles
 
+<div align="center">
+  
 | Circle hand | Line hand |
 |:-----------:|:---------:|
-| ![Circle hand — kept](images/fig1_circle_kept.png) | ![Line hand — kept](images/fig2_line_kept.png) |
+| <img src="images/fig1_circle_kept.png" height="350" alt="Circle hand — kept"> | <img src="images/fig2_line_kept.png" height="450" alt="Line hand — kept"> |
+
+</div>
 
 ### Removed cycles
 
