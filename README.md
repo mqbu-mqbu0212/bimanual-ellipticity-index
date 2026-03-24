@@ -22,9 +22,9 @@ A Python pipeline for computing the Ellipticity Index (OI) from bimanual coordin
 
 ---
 
-## Conventional vs This Approach
+## Previous implementation vs This Approach
 
-| | Conventional | This approach |
+| | Previous implementation | This approach |
 |---|---|---|
 | Axis definition / OI | Ellipse fitting-based. Works well for elliptical trajectories, but unstable for line-like trajectories — making unified processing across both hands difficult | PCA-based. Applicable consistently to ellipses, lines, and everything in between |
 | Cycle detection | Y-axis peak-based. When trajectories are tilted, detected boundaries deviate from actual turnaround points | PCA major-axis projection-based. Since the projection velocity approaches zero near the actual turnaround point — where inter-point distances are smallest — more accurate cycle boundaries are expected regardless of drawing angle |
