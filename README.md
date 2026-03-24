@@ -4,6 +4,10 @@
 
 A Python pipeline for computing the Ellipticity Index (OI) from bimanual coordination task data recorded on a pen tablet.
 
+**Problem:** OI computation methods are inconsistent across studies, and the code I had been using in my own research relied on manual steps and ambiguous axis definitions.
+**Solution:** A fully automated pipeline with PCA-based OI calculation, geometry-based cycle filtering, and unified configuration.
+**Result:** Reproducible OI values with explicit, adjustable parameters — applicable to both hands across any bimanual coordination dataset.
+
 ## Background
 
 In bimanual coordination research, participants are asked to simultaneously draw a circle with one hand and a straight line with the other. Due to the **bimanual coupling effect**, both trajectories become distorted: the circle-drawing hand's trajectory becomes more elliptical (elongated toward a line), and the line-drawing hand's trajectory curves toward an ellipse.
@@ -16,10 +20,18 @@ Despite OI being a widely used metric, **no standardised method exists for compu
 
 During my own research on how the sense of body ownership (manipulated via VR) affects bimanual coordination, I also found that:
 
-- The existing OI computation code I had written was fragmented, inconsistently configured, and partially manual
-- Rotation correction was applied by forcibly converting landscape-oriented ellipses to portrait orientation — an approach that is inherently arbitrary
+- The OI computation code I had been using was fragmented, inconsistently configured, and included manual steps — making results difficult to reproduce
+- The axis definition used for OI calculation was ambiguous: when a participant drew a landscape-oriented ellipse, forcing it to portrait orientation introduced an interpretation problem that could not be resolved without additional assumptions
 
-This tool is a ground-up rewrite that addresses those issues. It is released publicly with the hope that it helps **standardise OI computation across the field**, making results more comparable between studies and supporting further development of bimanual coordination research — including HCI applications involving body ownership, haptics, and motor control.
+This tool is a ground-up rewrite that addresses those issues. The axis ambiguity problem is not fully resolved — it remains an open question whether a landscape ellipse reflects the coupling effect or the participant's natural drawing style — but the pipeline makes the definition explicit and consistent, so at least the source of ambiguity is clear. It is released publicly with the hope that it helps **standardise OI computation across the field**, making results more comparable between studies and supporting further development of bimanual coordination research.
+
+### Applications
+
+This pipeline is designed for any research or application that requires quantifying trajectory ellipticity from repeated cyclic motion, including:
+
+- Bimanual coordination studies (motor control, cognitive neuroscience)
+- Rehabilitation assessment (phantom limb, motor recovery)
+- HCI research involving body ownership, haptics, or motor-sensory interaction
 
 ## Method
 
@@ -104,7 +116,7 @@ Images use anonymised data.
 ### Kept cycles
 
 <div align="center">
-  
+
 | Circle hand | Line hand |
 |:-----------:|:---------:|
 | <img src="images/fig1_circle_kept.png" height="350" alt="Circle hand — kept"> | <img src="images/fig2_line_kept.png" height="450" alt="Line hand — kept"> |
@@ -124,14 +136,16 @@ Images use anonymised data.
 
 ### Closure trim
 
-Since human-drawn trajectories drift between cycles, the tail often represents unintended overlap rather than the intended ellipse shape. When the tail enters the closure circle, exits, but remains within distance r of the front half trajectory, the cycle is trimmed at the point in the tail closest to the start. The figure below shows a before/after example (OI: 0.7892 → 0.8417).
+Since human-drawn trajectories drift between cycles, the tail often represents unintended overlap rather than the intended ellipse shape. When the tail enters the closure circle, exits, but remains within distance r of the front half trajectory, the cycle is trimmed at the point in the tail closest to the start.
+
+Including excess tail shifts the centroid of the trajectory, which in turn alters the sd_major and sd_minor derived from PCA — causing OI to deviate from the value that reflects the intended ellipse shape. Trimming ensures OI is computed from the intended portion of the trajectory only. The figure below shows a before/after example (OI: 0.7892 → 0.8417).
 
 ![Before and after trim](images/fig6_trim.png)
 
 ## Known Limitations
 
 - Coordinate bounds (`x_min` etc.) are hardcoded for a specific tablet — generalisation requires reconfiguration
-- Participants who naturally draw landscape-oriented ellipses (major axis horizontal) will show attenuated OI values under the PCA-based method; a y-axis-based OI option is planned for a future version
+- For participants who draw landscape-oriented ellipses, the PCA-based method tends to underrepresent the coupling effect. The core issue is an interpretation problem: it cannot be determined from the trajectory alone whether such an ellipse represents a vertically-oriented ellipse that has been tilted sideways, or whether the participant is simply drawing a horizontally-elongated shape from the start. Most participants showed a narrowing along the minor axis during bimanual tasks, suggesting coupling was occurring; however, at least one participant consistently drew landscape ellipses throughout and showed no measurable OI change under the PCA-based method. A y-axis-based OI option is planned for a future version, but the underlying interpretation problem remains open
 - Overlap that stays within the closure circle is not trimmed (classified as **pass**). Trim accuracy therefore depends on the closure circle size, and may be insufficient as a general quality guarantee
 - The escape condition (removal when the tail stays far from the front half for `closure_escape_n` consecutive points) has not triggered in any circle-hand data in the original dataset, and is not meaningful for the line hand. Its practical effect on data quality is uncertain. A configuration option to disable trimming entirely is planned for a future version
 
