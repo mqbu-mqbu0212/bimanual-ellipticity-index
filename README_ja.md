@@ -1,4 +1,4 @@
-# bimanual-ellipticity-index — 両手協調課題における楕円化指数（OI）計算パイプライン
+# bimanual-ovalization-index — 両手協調課題における楕円化指数（OI）計算パイプライン
 
 > 手動・曖昧だった楕円化指数計算を、再現性のある自動パイプラインとして再設計
 
