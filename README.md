@@ -1,6 +1,6 @@
 [日本語版はこちら](README_ja.md)
 
-# bimanual-ellipticity-index — OI Calculator for Bimanual Coordination Research
+# bimanual-ovalization-index — OI Calculator for Bimanual Coordination Research
 
 > Redesigned an ad-hoc, manual ellipticity index pipeline into a reproducible, fully automated system
 
