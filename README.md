@@ -170,6 +170,7 @@ Since human-drawn trajectories inevitably drift between cycles, the tail portion
 - For participants who draw landscape-oriented ellipses, the PCA-based method tends to underrepresent the coupling effect. The core issue is an interpretation problem: it cannot be determined from the trajectory alone whether such an ellipse represents a vertically-oriented ellipse that has been tilted sideways, or whether the participant is simply drawing a horizontally-elongated shape from the start. Most participants showed a narrowing along the minor axis during bimanual tasks, suggesting coupling was occurring; however, at least one participant consistently drew landscape ellipses throughout and showed no measurable OI change under the PCA-based method. A y-axis-based OI option is planned for a future version, but the underlying interpretation problem remains open
 - Overlap that stays within the closure circle is not trimmed (classified as **pass**). Trim accuracy therefore depends on the closure circle size, and may be insufficient as a general quality guarantee
 - The escape condition (removal when the tail stays far from the front half for `closure_escape_n` consecutive points) has not triggered in any circle-hand data in the original dataset, and is not meaningful for the line hand. Its practical effect on data quality is uncertain. A configuration option to disable trimming entirely is planned for a future version
+- All numeric rows in the CSV are processed; there is no way to limit the analysis range using marker strings. The pipeline assumes the entire recorded period is the intended analysis target
 
 ## Planned Improvements (v2)
 
@@ -181,6 +182,7 @@ Since human-drawn trajectories inevitably drift between cycles, the tail portion
 - Configurable x/y column selection
 - Per-cycle statistical output of ellipse angle and fitting residual (mean ± standard deviation)
 - Drawing quality score based on angle variance and residual variance
+- Optional range limiting by marker strings (e.g. process only rows between specified start/end markers)
 
 ## Applications
 
